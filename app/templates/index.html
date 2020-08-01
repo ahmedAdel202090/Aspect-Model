@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="{{ url_for('static', filename='img/icon.png') }}"/>
+    <title>Sentiment API</title>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <h1>RAT Sentiment TEST</h1>
+    <form>
+        <input name="rev" id="review" type="text" placeholder="Enter your review">
+        <button id="reviewSubmit"> Predict </button>
+        <ul id='results'></ul>
+    </form>
+    <button id="arApiT">Array Api Test</button>
+</body>
