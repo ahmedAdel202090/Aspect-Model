@@ -22,6 +22,22 @@ def word2vec(word):
     vector = eval(response.text)
     return np.array(vector['vector'])
 
-def get_sentiment(text):
+def get_sentiment(self,text):
     return randint(0,4)
-
+# class Sentiment(object):
+#     def __init__(self):
+#         self.sentiment_class = -1
+#         self.states = {0:'DEFAULT' , 1:'IN_PROGRESS',2:'FINISHED',-1:'FAILD'}
+#         self.state = self.states[0] #Default    
+#     def get_sentiment(self,text , callback=''):
+#         url = "https://aspect-based-sentiment.herokuapp.com/api/predict/classname"
+#         body = {"review": text,"callback_url":callback}
+#         response = requests.post(url, body)
+#         json_res = eval(response.text)
+#         if json_res['msg'] == "Request Created":
+#             self.state = self.states[1]   
+#         else:
+#             self.state = self.states[-1]    
+#     def callback(self,sentiment_class):
+#         self.sentiment_class = sentiment_class
+#         self.state = self.states[2]
