@@ -22,7 +22,7 @@ def word2vec(word):
     vector = eval(response.text)
     return np.array(vector['vector'])
 
-def get_sentiment(self,text):
+def get_sentiment(text):
     return randint(0,4)
 # class Sentiment(object):
 #     def __init__(self):
