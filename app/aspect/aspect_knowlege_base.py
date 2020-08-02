@@ -12,16 +12,14 @@ class AspectKnowledgeBase(object):
     self.texts = texts
     text = ' '.join(texts)
     doc_vec = seq_to_vec(text)
-    all_aspects = []
     for text in texts:
       aspects = self.aspect_extraction(doc_vec,text,ngram,skip_keywords)
-      all_aspects.extend(aspects)
-    for aspect_obj in all_aspects:
-      self.num_keywords +=1
-      if not aspect_obj['aspect'] in self.knowledge_set.keys():
-        self.knowledge_set[aspect_obj['aspect']] = {'sentiment':[0,0,0,0,0] , 'score':aspect_obj['score']}
-      sentiment = aspect_obj['sentiment']  
-      self.knowledge_set[aspect_obj['aspect']]['sentiment'][sentiment] +=1
+      for aspect_obj in aspects:
+        self.num_keywords +=1
+        if not aspect_obj['aspect'] in self.knowledge_set.keys():
+          self.knowledge_set[aspect_obj['aspect']] = {'sentiment':[0,0,0,0,0] , 'score':aspect_obj['score']}
+        sentiment = aspect_obj['sentiment']  
+        self.knowledge_set[aspect_obj['aspect']]['sentiment'][sentiment] +=1
     self.rank_normalize()
     self.knowledge_set = dict(sorted(self.knowledge_set.items(), key=lambda item: item[1]['score'],reverse=True))
     return self.knowledge_set    
