@@ -2,7 +2,7 @@ from app.aspect.utils import seq_to_vec
 from app.aspect.aspect_extraction import AspectExtraction
 from threading import Thread
 
-MAX_SIZE_THREAD_GET = 20
+MAX_SIZE_THREAD_GET = 5
 def partition(arr, num_threads):
     parts = []
     r = len(arr) / num_threads # r represent ratio between part size for each thread
