@@ -31,7 +31,9 @@ class AspectExtraction(object):
         #self.ignores.extend([str(ent.lemma_) for ent in doc.ents if ent.label_ in IGNORED_ENTITIES])
         for i in range(0, len(self.sents)):
             self.index = i
-            self.text_filter().run_rake().getNgrams(ngrams)
+            self.text_filter()
+            self.run_rake()
+            self.getNgrams(ngrams)
             self.make_keywords_to_aspects()  # pass sentence index to add its sentiment to keyword
             self.filter_keywords()
             self.calculate_similarity()
