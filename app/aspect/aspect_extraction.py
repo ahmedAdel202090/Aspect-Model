@@ -20,11 +20,12 @@ class AspectExtraction(object):
         self.ignores = []
         self.doc_vector = np.zeros(VECTOR_SIZE, dtype='float32')
 
-    def __call__(self, doc_vector, text, ngrams, topics=[]):
+    def __call__(self,model ,doc_vector, text, ngrams, topics=[]):
         self.__init__()
         self.ignores = topics
         self.topics = topics
         self.doc_vector = doc_vector
+        self.model = model
         doc = nlp(text)
         self.sents = [(str(sent), get_sentiment(str(sent)))
                       for sent in doc.sents]
@@ -42,9 +43,9 @@ class AspectExtraction(object):
     def calculate_similarity(self):
         if len(self.aspects) <= 0:
             return
-        aspects_vector_space = np.array([seq_to_vec(str(aspect_obj['aspect'])).tolist()[0] for aspect_obj in self.aspects])
+        aspects_vector_space = np.array([seq_to_vec(self.model ,str(aspect_obj['aspect'])).tolist()[0] for aspect_obj in self.aspects])
         doc_similarities = cosine_similarity(aspects_vector_space, self.doc_vector)
-        topic_similarities = cosine_similarity(aspects_vector_space, seq_to_vec(' '.join(self.topics)))
+        topic_similarities = cosine_similarity(aspects_vector_space, seq_to_vec(self.model,' '.join(self.topics)))
         for i, aspect_obj in enumerate(self.aspects):
             score = 0.0
             if len(self.topics) > 0:

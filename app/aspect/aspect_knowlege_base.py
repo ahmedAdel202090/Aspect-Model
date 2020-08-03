@@ -8,12 +8,12 @@ class AspectKnowledgeBase(object):
     self.knowledge_set = {}
     self.aspect_extraction = AspectExtraction()
     self.num_keywords=0
-  def __call__(self,texts,ngram,skip_keywords):
+  def __call__(self,model,texts,ngram,skip_keywords):
     self.texts = texts
     text = ' '.join(texts)
-    doc_vec = seq_to_vec(text)
+    doc_vec = seq_to_vec(model,text)
     for text in texts:
-      aspects = self.aspect_extraction(doc_vec,text,ngram,skip_keywords)
+      aspects = self.aspect_extraction(model,doc_vec,text,ngram,skip_keywords)
       for aspect_obj in aspects:
         self.num_keywords +=1
         if not aspect_obj['aspect'] in self.knowledge_set.keys():
