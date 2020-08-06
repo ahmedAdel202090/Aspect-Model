@@ -25,11 +25,14 @@ def callback(target_fun,input_data,callback_url,call_name):
         "msg":"Succeed",
         "errmsg":"NULL"
     }
-    for _ in range(MAX_REQUEST_RETRIES):
-        webhook_request = requests.post(url=callback_url, json=resp)
-        if webhook_request.status_code == 200:
-            print("[{0}]:Request Delivered to <{1}>.".format(call_name, callback_url))
-            break
+    webhook_request = requests.post(url=callback_url, json=resp)
+    print("[{0}]:Request Delivered to <{1}>.".format(call_name, callback_url))
+    del webhook_request
+    # for _ in range(MAX_REQUEST_RETRIES):
+    #     webhook_request = requests.post(url=callback_url, json=resp)
+    #     if webhook_request.status_code == 200:
+    #         print("[{0}]:Request Delivered to <{1}>.".format(call_name, callback_url))
+    #         break
 
 
 def load_model():
