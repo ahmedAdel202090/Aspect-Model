@@ -38,9 +38,8 @@ def get_num_threads(size):
 def segmentation(reviews,result_arr):
     for review in reviews:
         doc = nlp(review["text"])
-        sents = [str(sent) for sent in doc.sents]
-        review["opinionUnits"] = sents
-        result_arr.append(review)
+        sents = [{'text':str(sent),'review':review['_id']} for sent in doc.sents]
+        result_arr.extend(sents)
 def sentence_segmenter(reviews):
     result_arr = []
     num_threads = len(reviews)
