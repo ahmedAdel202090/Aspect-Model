@@ -46,7 +46,7 @@ def sentence_segmenter(reviews):
     num_threads = len(reviews)
     parts = partition(reviews,num_threads)
     threads = []
-    for part in range(0,parts):
+    for part in parts:
         thread = threading.Thread(target=segmentation, args=(part, result_arr))
         thread.start()
         threads.append(thread)
