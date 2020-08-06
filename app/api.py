@@ -4,7 +4,7 @@ import threading
 import requests
 from app.aspect.aspect_extraction import AspectExtraction
 from app.aspect.aspect_knowlege_base import AspectKnowledgeBase
-from app.aspect.utils import seq_to_vec
+from app.aspect.utils import seq_to_vec,sentence_segmenter
 import threading
 import os
 import time
@@ -38,6 +38,13 @@ def load_word2vec():
     else:
         threading.Thread(target=load_model, name="Model-Loading-Thread").start()
         return jsonify({'loaded':False , 'msg':'model not loaded'})
+
+@app.route('/sentence-seg',methods=['POST'])
+def sentence_segmentation():
+    reviews = request.json["reviews"]
+    #callback = request.json["callback"]
+    result = sentence_segmenter(reviews)
+    return jsonify(result)
 
 @app.route('/api/aspect_extraction',methods=["POST"])
 def aspect_extraction():
