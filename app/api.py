@@ -21,6 +21,7 @@ def callback(target_fun, args, callback_url, call_name):
     print("[{0}] Request is in progress and will be delivered to {1}".format(
         call_name, callback_url))
     result = target_fun(*args)
+    print("[result-callback]: ",result)
     resp = {
         "data": result,
         "msg": "Succeed",
