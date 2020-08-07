@@ -17,13 +17,14 @@ MODEL_URL = 'https://storagerat.blob.core.windows.net/telda/word2vec-150-400k.bi
 model = None
 
 
-def callback(target_fun,input_data,callback_url,call_name):
-    print("[{0}] Request is in progress and will be delivered to {1}".format(call_name,callback_url))
-    result = target_fun(input_data)
+def callback(target_fun, args, callback_url, call_name):
+    print("[{0}] Request is in progress and will be delivered to {1}".format(
+        call_name, callback_url))
+    result = target_fun(*args)
     resp = {
-        "data":result,
-        "msg":"Succeed",
-        "errmsg":"NULL"
+        "data": result,
+        "msg": "Succeed",
+        "errmsg": "NULL"
     }
     webhook_request = requests.post(url=callback_url, json=resp)
     print("[{0}]:Request Delivered to <{1}>.".format(call_name, callback_url))
@@ -63,19 +64,20 @@ def load_word2vec():
 def sentence_segmentation():
     reviews = request.json["reviews"]
     callback_url = request.json["callback_url"]
-    resp=None
+    resp = None
     if reviews is None or callback_url is None:
         resp = {
             "data": "NULL",
-            "msg": "Prediction Failed",
+            "msg": "Sentence-Segmentation Failed",
             "errMsg": "One of the required parameters is null"
         }
     else:
-        threading.Thread(target=callback, args=(sentence_segmenter,reviews,callback_url,"Sentence-Segmentation")).start()
+        threading.Thread(target=callback, args=(
+            sentence_segmenter, (reviews,), callback_url, "Sentence-Segmentation")).start()
         resp = {
-            "msg":"Sentence-Segmentation starting",
-            "errmsg":"NULL"
-        }    
+            "msg": "Sentence-Segmentation starting",
+            "errmsg": "NULL"
+        }
     return jsonify(resp)
 
 
@@ -87,10 +89,24 @@ def aspect_extraction():
         review = request.json["review"]
         n_grams = request.json['n_grams']
         domains = request.json["tags"]
-        extractor = AspectExtraction()
-        doc_vec = seq_to_vec(model, review)
-        result = extractor(model, doc_vec, review, int(n_grams), domains)
-        return jsonify(result)
+        callback_url = request.json["callback_url"]
+        resp = None
+        if callback_url is None or domains is None or n_grams is None:
+            resp = {
+                "data": "NULL",
+                "msg": "Aspect-Extraction Failed",
+                "errMsg": "One of the required parameters is null"
+            }
+        else:
+            extractor = AspectExtraction()
+            doc_vec = seq_to_vec(model, review)
+            threading.Thread(target=callback, args=(extractor, (model, doc_vec, review, int(
+                n_grams), domains), callback_url, "Aspect-Extraction")).start()
+            resp = {
+                "msg": "Aspect-Extraction starting",
+                "errmsg": "NULL"
+            }
+        return jsonify(resp)
     else:
         return jsonify({'loaded': False, 'msg': 'model not loaded'})
 
@@ -103,8 +119,21 @@ def create_knowledge_base():
         reviews = request.json["reviews"]
         n_grams = request.json['n_grams']
         domains = request.json["tags"]
-        aspect_knowledge_base = AspectKnowledgeBase()
-        result = aspect_knowledge_base(model, reviews, n_grams, domains)
-        return jsonify(result)
+        callback_url = request.json["callback_url"]
+        resp = None
+        if callback_url is None or domains is None or n_grams is None:
+            resp = {
+                "data": "NULL",
+                "msg": "Aspect-KnowledgeBase Failed",
+                "errMsg": "One of the required parameters is null"
+            }
+        else:
+            aspect_knowledge_base = AspectKnowledgeBase()
+            threading.Thread(target=callback, args=(aspect_knowledge_base, (model, reviews,int(n_grams), domains), callback_url, "Aspect-KnowledgeBase")).start()
+            resp = {
+                "msg": "Aspect-KnowledgeBase Start Generating...",
+                "errmsg": "NULL"
+            }
+        return jsonify(resp)
     else:
         return jsonify({'loaded': False, 'msg': 'model not loaded'})

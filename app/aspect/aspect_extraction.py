@@ -26,18 +26,20 @@ class AspectExtraction(object):
         self.topics = topics
         self.doc_vector = doc_vector
         self.model = model
-        doc = nlp(text)
-        self.sents = [(str(sent), get_sentiment(str(sent)))
-                      for sent in doc.sents]
+        self.text = text['text']
+        self.sentiment = text['sentiment']
+        # doc = nlp(text)
+        # self.sents = [(str(sent), get_sentiment(str(sent)))
+        #               for sent in doc.sents]
         #self.ignores.extend([str(ent.lemma_) for ent in doc.ents if ent.label_ in IGNORED_ENTITIES])
-        for i in range(0, len(self.sents)):
-            self.index = i
-            self.text_filter()
-            self.run_rake()
-            self.getNgrams(ngrams)
-            self.make_keywords_to_aspects()  # pass sentence index to add its sentiment to keyword
-            self.filter_keywords()
-            self.calculate_similarity()
+        # for i in range(0, len(self.sents)):
+        #     self.index = i
+        self.text_filter()
+        self.run_rake()
+        self.getNgrams(ngrams)
+        self.make_keywords_to_aspects()  # pass sentence index to add its sentiment to keyword
+        self.filter_keywords()
+        self.calculate_similarity()
         return self.aspects
 
     def calculate_similarity(self):
@@ -57,7 +59,7 @@ class AspectExtraction(object):
 
     def text_filter(self):
         result = []
-        text_doc = nlp(self.sents[self.index][0], disable=['ner'])
+        text_doc = nlp(self.text, disable=['ner'])
         is_prev_noun = False
         is_added_of = False
         last_of_index = -1
@@ -125,6 +127,6 @@ class AspectExtraction(object):
             # rand changed to predict sentiment
             self.aspects.append({
                 'aspect': self.sent_keywords[0][1],
-                'sentiment': self.sents[self.index][1]
+                'sentiment': self.sentiment
             })
         return self
