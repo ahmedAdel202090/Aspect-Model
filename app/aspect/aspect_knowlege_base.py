@@ -21,7 +21,7 @@ class AspectKnowledgeBase(object):
           self.knowledge_set[aspect_obj['aspect']] = {'sentiment':[0,0,0,0,0] , 'score':aspect_obj['score']}
         sentiment = aspect_obj['sentiment']  
         self.knowledge_set[aspect_obj['aspect']]['sentiment'][sentiment] +=1
-    #self.rank_normalize()
+    self.rank_normalize()
     #self.knowledge_set = dict(sorted(self.knowledge_set.items(), key=lambda item: item[1]['score'],reverse=True))
     self.knowledge_set = self.transform_aspect_to_obj(self.knowledge_set)
     return self.knowledge_set    

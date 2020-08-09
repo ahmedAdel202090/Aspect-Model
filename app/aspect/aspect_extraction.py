@@ -9,6 +9,7 @@ from itertools import chain
 
 W1 = 0.3
 W2 = 0.7
+IGNORED_ENTITIES  = ['GPE','LOC','PRODUCT','WORK_OF_ART','LANGUAGE','DATE','TIME','ORDINAL','CARDINAL']
 
 
 class AspectExtraction(object):
@@ -28,10 +29,10 @@ class AspectExtraction(object):
         self.model = model
         self.text = text['text']
         self.sentiment = text['sentiment']
-        # doc = nlp(text)
+        doc = nlp(self.text)
         # self.sents = [(str(sent), get_sentiment(str(sent)))
         #               for sent in doc.sents]
-        #self.ignores.extend([str(ent.lemma_) for ent in doc.ents if ent.label_ in IGNORED_ENTITIES])
+        self.ignores.extend([str(ent.lemma_) for ent in doc.ents if ent.label_ in IGNORED_ENTITIES])
         # for i in range(0, len(self.sents)):
         #     self.index = i
         self.text_filter()
