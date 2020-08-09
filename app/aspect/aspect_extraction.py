@@ -33,6 +33,10 @@ class AspectExtraction(object):
         # self.sents = [(str(sent), get_sentiment(str(sent)))
         #               for sent in doc.sents]
         self.ignores.extend([str(ent.lemma_) for ent in doc.ents if ent.label_ in IGNORED_ENTITIES])
+        temp_ignores = []
+        for s in self.ignores:
+            temp_ignores.extend(word_tokenize(s))
+        self.ignores = temp_ignores  
         # for i in range(0, len(self.sents)):
         #     self.index = i
         self.text_filter()
