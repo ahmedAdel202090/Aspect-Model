@@ -29,7 +29,7 @@ class AspectExtraction(object):
         self.model = model
         self.text = text['text']
         self.sentiment = text['sentiment']
-        doc = nlp(text)
+        doc = nlp(self.text)
         # self.sents = [(str(sent), get_sentiment(str(sent)))
         #               for sent in doc.sents]
         self.ignores.extend([str(ent.lemma_) for ent in doc.ents if ent.label_ in IGNORED_ENTITIES])
