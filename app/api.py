@@ -81,6 +81,20 @@ def sentence_segmentation():
     return jsonify(resp)
 
 
+@app.route('/api/guest/aspect_extraction/create_knowledge_base',methods=['POST'])
+def aspect_extraction_guest():
+    global model
+    global is_loaded
+    if model != None and is_loaded:
+        aspect_knowledge_base = AspectKnowledgeBase()
+        reviews = request.json['reviews']
+        aspects = aspect_knowledge_base(model, reviews,2, ['phone','device','smartphone'])
+        return jsonify(aspects)
+
+    else:
+        return jsonify({'loaded': False, 'msg': 'model not loaded'})    
+
+
 @app.route('/api/aspect_extraction', methods=["POST"])
 def aspect_extraction():
     global model
